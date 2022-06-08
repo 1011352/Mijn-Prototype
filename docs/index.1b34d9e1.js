@@ -142,13 +142,13 @@
       this[globalName] = mainExports;
     }
   }
-})({"fpRtI":[function(require,module,exports) {
+})({"cGvIw":[function(require,module,exports) {
 "use strict";
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "a7523702901f85c2";
+module.bundle.HMR_BUNDLE_ID = "638f34211b34d9e1";
 function _toConsumableArray(arr) {
     return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
@@ -513,85 +513,35 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"edeGs":[function(require,module,exports) {
+},{}],"cS4Fe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Game", ()=>Game
+parcelHelpers.export(exports, "Startmenu", ()=>Startmenu
 );
 var _pixiJs = require("pixi.js");
-var _plusPng = require("./images/plus.png");
-var _plusPngDefault = parcelHelpers.interopDefault(_plusPng);
-var _cityJpg = require("./images/city.jpg");
-var _cityJpgDefault = parcelHelpers.interopDefault(_cityJpg);
-var _minPng = require("./images/min.png");
-var _minPngDefault = parcelHelpers.interopDefault(_minPng);
-var _city2Jpg = require("./images/city2.jpg");
-var _city2JpgDefault = parcelHelpers.interopDefault(_city2Jpg);
-var _plus = require("./plus");
-var _min = require("./min");
-class Game {
-    text = new _pixiJs.Text("Wat is 8 - 2", {
-        fill: [
-            "#ffffff"
-        ]
-    });
+var _game = require("./game");
+var _button = require("./button");
+class Startmenu {
     constructor(){
-        this.pixi = new _pixiJs.Application({
+        console.log("startmenu created");
+        this._pixi = new _pixiJs.Application({
             width: 1000,
-            height: 546
+            height: 546,
+            backgroundColor: 3355443
         });
-        document.body.appendChild(this.pixi.view);
-        this.loader = new _pixiJs.Loader();
-        this.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _minPngDefault.default).add('city2Texture', _city2JpgDefault.default);
-        this.loader.load(()=>this.loadCompleted()
+        document.body.appendChild(this._pixi.view);
+        const button = new _button.Button(this._pixi.screen.width / 2, this._pixi.screen.height / 2);
+        this._pixi.stage.addChild(button);
+        button.on("pointerdown", ()=>this.onClick()
         );
     }
-    bgChange() {}
-    loadCompleted() {
-        this.bg = new _pixiJs.Sprite(this.loader.resources["cityTexture"].texture);
-        this.pixi.stage.addChild(this.bg);
-        this.bg2 = new _pixiJs.Sprite(this.loader.resources["city2Texture"].texture);
-        this.pixi.stage.addChild(this.bg2);
-        this.min = new _min.Min(this.loader.resources["minTexture"].texture, this);
-        this.pixi.stage.addChild(this.min);
-        this.plus = new _plus.Plus(this.loader.resources["plusTexture"].texture, this);
-        this.pixi.stage.addChild(this.plus);
-        this.pixi.ticker.add((delta)=>this.update(delta)
-        );
-    }
-    collision(a, b) {
-        const bounds1 = a.getBounds();
-        const bounds2 = b.getBounds();
-        return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
-    }
-    randomInteger(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    mathQues() {
-        let a = this.randomInteger(4, 9);
-        let b = this.randomInteger(1, 4);
-        let c = a - b;
-        /*let text = new PIXI.Text("Wat is",a - b, { fill: ["#ffffff"] })
-
-        text.x = 200
-            text.y = 50
-            this.pixi.stage.addChild(text)
-            */ console.log("wat is", a, "-", b);
-        console.log("het antword is", c);
-    }
-    update(delta) {
-        this.plus.update(delta);
-        if (this.collision(this.plus, this.min)) {
-            this.text.x = 200;
-            this.text.y = 200;
-            this.pixi.stage.addChild(this.text);
-            this.mathQues();
-        } else this.pixi.stage.removeChild(this.text);
+    onClick() {
+        new _game.Game(this._pixi);
     }
 }
-new Game();
+new Startmenu();
 
-},{"pixi.js":"dsYej","./images/plus.png":"hhba6","./images/city.jpg":"ivwY1","./images/min.png":"k7Dlr","./images/city2.jpg":"j9BFL","./plus":"7WMnV","./min":"iNJhi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./game":"edeGs","./button":"hHDeU","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -38772,8 +38722,86 @@ function __extends(d, b) {
     return AnimatedSprite1;
 }(_sprite.Sprite);
 
-},{"@pixi/core":"7PEF8","@pixi/sprite":"9mbxh","@pixi/ticker":"8ekG7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hhba6":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "plus.a530b1a6.png" + "?" + Date.now();
+},{"@pixi/core":"7PEF8","@pixi/sprite":"9mbxh","@pixi/ticker":"8ekG7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"edeGs":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Game", ()=>Game
+);
+var _pixiJs = require("pixi.js");
+var _plusPng = require("./images/plus.png");
+var _plusPngDefault = parcelHelpers.interopDefault(_plusPng);
+var _cityJpg = require("./images/city.jpg");
+var _cityJpgDefault = parcelHelpers.interopDefault(_cityJpg);
+var _minPng = require("./images/min.png");
+var _minPngDefault = parcelHelpers.interopDefault(_minPng);
+var _city2Jpg = require("./images/city2.jpg");
+var _city2JpgDefault = parcelHelpers.interopDefault(_city2Jpg);
+var _plus = require("./plus");
+var _min = require("./min");
+class Game {
+    text = new _pixiJs.Text("Wat is 8 - 2", {
+        fill: [
+            "#ffffff"
+        ]
+    });
+    constructor(pixi){
+        this._pixi = pixi;
+        this.pixi = new _pixiJs.Application({
+            width: 1000,
+            height: 546
+        });
+        document.body.appendChild(this.pixi.view);
+        this.loader = new _pixiJs.Loader();
+        this.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _minPngDefault.default).add('city2Texture', _city2JpgDefault.default);
+        this.loader.load(()=>this.loadCompleted()
+        );
+    }
+    bgChange() {}
+    loadCompleted() {
+        this.bg = new _pixiJs.Sprite(this.loader.resources["cityTexture"].texture);
+        this.pixi.stage.addChild(this.bg);
+        this.bg2 = new _pixiJs.Sprite(this.loader.resources["city2Texture"].texture);
+        this.pixi.stage.addChild(this.bg2);
+        this.min = new _min.Min(this.loader.resources["minTexture"].texture, this);
+        this.pixi.stage.addChild(this.min);
+        this.plus = new _plus.Plus(this.loader.resources["plusTexture"].texture, this);
+        this.pixi.stage.addChild(this.plus);
+        this.pixi.ticker.add((delta)=>this.update(delta)
+        );
+    }
+    collision(a, b) {
+        const bounds1 = a.getBounds();
+        const bounds2 = b.getBounds();
+        return bounds1.x < bounds2.x + bounds2.width && bounds1.x + bounds1.width > bounds2.x && bounds1.y < bounds2.y + bounds2.height && bounds1.y + bounds1.height > bounds2.y;
+    }
+    randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    mathQues() {
+        let a = this.randomInteger(4, 9);
+        let b = this.randomInteger(1, 4);
+        let c = a - b;
+        /*let text = new PIXI.Text("Wat is",a ,"-", b, { fill: ["#ffffff"] })
+
+        text.x = 200
+            text.y = 50
+            this.pixi.stage.addChild(text)
+            */ console.log("wat is", a, "-", b);
+        console.log("het antword is", c);
+    }
+    update(delta) {
+        this.plus.update(delta);
+        if (this.collision(this.plus, this.min)) {
+            this.text.x = 200;
+            this.text.y = 200;
+            this.pixi.stage.addChild(this.text);
+            this.mathQues();
+        } else this.pixi.stage.removeChild(this.text);
+    }
+}
+
+},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jWmLF":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "plus.a530b1a6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
@@ -38809,14 +38837,14 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"ivwY1":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "city.3dfee61f.jpg" + "?" + Date.now();
+},{}],"dp0wP":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city.3dfee61f.jpg" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"k7Dlr":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "min.7d0a9b7e.png" + "?" + Date.now();
+},{"./helpers/bundle-url":"lgJ39"}],"b45SD":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "min.7d0a9b7e.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"j9BFL":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "city2.1ff0dd0b.jpg" + "?" + Date.now();
+},{"./helpers/bundle-url":"lgJ39"}],"4z1Sl":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city2.1ff0dd0b.jpg" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"7WMnV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -38906,6 +38934,37 @@ class Min extends _pixiJs.Sprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fpRtI","edeGs"], "edeGs", "parcelRequirea0e5")
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Button", ()=>Button
+);
+var _pixiJs = require("pixi.js");
+class Button extends _pixiJs.Graphics {
+    constructor(x, y){
+        super();
+        this.x = x;
+        this.y = y;
+        this.beginFill(16711680);
+        this.drawRoundedRect(0, 0, 150, 80, 15);
+        this.endFill();
+        const startText = new _pixiJs.Text("Start Game", {
+            breakWords: true,
+            dropShadow: true,
+            fill: "white",
+            fontFamily: "Arial Black",
+            fontWeight: "bold",
+            strokeThickness: 3
+        });
+        startText.x = this.getBounds().width / 2;
+        startText.y = this.getBounds().height / 2;
+        startText.anchor.set(0.5);
+        this.addChild(startText);
+        this.buttonMode = true;
+        this.interactive = true;
+    }
+}
 
-//# sourceMappingURL=index.901f85c2.js.map
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["cGvIw","cS4Fe"], "cS4Fe", "parcelRequirea0e5")
+
+//# sourceMappingURL=index.1b34d9e1.js.map
