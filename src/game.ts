@@ -5,6 +5,7 @@ import minImage from "./images/min.png"
 import city2Image from "./images/city2.jpg"
 import { Plus } from './plus'
 import { Min } from './min'
+import { Background } from './background'
 
 
 
@@ -12,7 +13,7 @@ export class Game {
     pixi: PIXI.Application
     loader: PIXI.Loader
     plus: Plus
-    bg: PIXI.Sprite
+    bg : Background
     bg2: PIXI.Sprite
     x: number
     min: Min
@@ -38,17 +39,20 @@ export class Game {
 
     }
 
-    bgChange() {
-
-    }
-
     loadCompleted() {
 
-        this.bg = new PIXI.Sprite(this.loader.resources["cityTexture"].texture!)
+        this.bg = new Background(this.loader.resources["city2Texture"].texture!, this)
         this.pixi.stage.addChild(this.bg)
 
-        this.bg2 = new PIXI.Sprite(this.loader.resources["city2Texture"].texture!)
+
+        /*
+        this.pixi.texture 
+
+        */
+
+        /*this.bg2 = new PIXI.Sprite(this.loader.resources["cityTexture"].texture!)
         this.pixi.stage.addChild(this.bg2)
+        */
 
         this.min = new Min(this.loader.resources["minTexture"].texture!, this)
         this.pixi.stage.addChild(this.min)
@@ -98,6 +102,7 @@ export class Game {
 
     update(delta: number) {
         this.plus.update(delta)
+        this.bg.update(delta)
 
 
 

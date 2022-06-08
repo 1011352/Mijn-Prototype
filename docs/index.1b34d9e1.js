@@ -38738,6 +38738,7 @@ var _city2Jpg = require("./images/city2.jpg");
 var _city2JpgDefault = parcelHelpers.interopDefault(_city2Jpg);
 var _plus = require("./plus");
 var _min = require("./min");
+var _background = require("./background");
 class Game {
     text = new _pixiJs.Text("Wat is 8 - 2", {
         fill: [
@@ -38756,13 +38757,15 @@ class Game {
         this.loader.load(()=>this.loadCompleted()
         );
     }
-    bgChange() {}
     loadCompleted() {
-        this.bg = new _pixiJs.Sprite(this.loader.resources["cityTexture"].texture);
+        this.bg = new _background.Background(this.loader.resources["city2Texture"].texture, this);
         this.pixi.stage.addChild(this.bg);
-        this.bg2 = new _pixiJs.Sprite(this.loader.resources["city2Texture"].texture);
-        this.pixi.stage.addChild(this.bg2);
-        this.min = new _min.Min(this.loader.resources["minTexture"].texture, this);
+        /*
+        this.pixi.texture 
+
+        */ /*this.bg2 = new PIXI.Sprite(this.loader.resources["cityTexture"].texture!)
+        this.pixi.stage.addChild(this.bg2)
+        */ this.min = new _min.Min(this.loader.resources["minTexture"].texture, this);
         this.pixi.stage.addChild(this.min);
         this.plus = new _plus.Plus(this.loader.resources["plusTexture"].texture, this);
         this.pixi.stage.addChild(this.plus);
@@ -38791,6 +38794,7 @@ class Game {
     }
     update(delta) {
         this.plus.update(delta);
+        this.bg.update(delta);
         if (this.collision(this.plus, this.min)) {
             this.text.x = 200;
             this.text.y = 200;
@@ -38800,7 +38804,7 @@ class Game {
     }
 }
 
-},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jWmLF":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./background":"6FKGH"}],"jWmLF":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "plus.a530b1a6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -38858,8 +38862,8 @@ class Plus extends _pixiJs.Sprite {
     constructor(texture, game){
         super(texture);
         this.game = game;
-        this.x = Math.random() * game.pixi.screen.right;
-        this.y = Math.random() * game.pixi.screen.bottom;
+        this.x = 0;
+        this.y = 0;
         window.addEventListener("keydown", (e)=>this.onKeyDown(e)
         );
         window.addEventListener("keyup", (e)=>this.onKeyUp(e)
@@ -38909,6 +38913,9 @@ class Plus extends _pixiJs.Sprite {
     }
     keepInScreen() {
         if (this.getBounds().left > this.game.pixi.screen.right) this.x = -this.getBounds().width;
+        if (this.getBounds().top > this.game.pixi.screen.bottom) this.y = -this.getBounds().height;
+        if (this.getBounds().bottom < this.game.pixi.screen.top) this.y = this.getBounds().height + 360;
+        if (this.getBounds().right < this.game.pixi.screen.left) this.x = this.getBounds().width + 1000;
     }
     update(delta) {
         this.x += this.xspeed * delta;
@@ -38931,6 +38938,54 @@ class Min extends _pixiJs.Sprite {
         this.height = 150;
         this.x = Math.random() * game.pixi.screen.right;
         this.y = Math.random() * game.pixi.screen.bottom;
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6FKGH":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Background", ()=>Background
+);
+var _pixiJs = require("pixi.js");
+class Background extends _pixiJs.Sprite {
+    xmove = 0;
+    constructor(texture, game){
+        super(texture);
+        this.game = game;
+        window.addEventListener("keydown", (e)=>this.onKeyDown(e)
+        );
+        window.addEventListener("keyup", (e)=>this.onKeyUp(e)
+        );
+    }
+    onKeyDown(e) {
+        switch(e.key.toUpperCase()){
+            case "A":
+            case "ARROWLEFT":
+                this.xmove = 4;
+                break;
+            case "D":
+            case "ARROWRIGHT":
+                this.xmove = -4;
+        }
+    }
+    onKeyUp(e) {
+        switch(e.key.toUpperCase()){
+            case " ":
+                break;
+            case "A":
+            case "D":
+            case "ARROWLEFT":
+            case "ARROWRIGHT":
+                this.xmove = 0;
+        }
+    }
+    update(delta) {
+        this.x += this.xmove * delta;
+        this.keepInScreen1();
+    }
+    keepInScreen1() {
+        if (this.getBounds().left > this.game.pixi.screen.right) this.x = 0;
+        if (this.getBounds().right < this.game.pixi.screen.left) this.x = 1000;
     }
 }
 
