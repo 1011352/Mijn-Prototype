@@ -536,7 +536,7 @@ class Startmenu {
         );
     }
     onClick() {
-        this.button.destroy();
+        this.button.destroy;
         new _game.Game(this._pixi);
     }
 }
@@ -38737,37 +38737,33 @@ var _minPng = require("./images/min.png");
 var _minPngDefault = parcelHelpers.interopDefault(_minPng);
 var _city2Jpg = require("./images/city2.jpg");
 var _city2JpgDefault = parcelHelpers.interopDefault(_city2Jpg);
+var _city3Jpg = require("./images/city3.jpg");
+var _city3JpgDefault = parcelHelpers.interopDefault(_city3Jpg);
 var _plus = require("./plus");
 var _min = require("./min");
 var _background = require("./background");
 class Game {
-    text = new _pixiJs.Text("Wat is 8 - 2", {
-        fill: [
-            "#ffffff"
-        ]
-    });
+    mins = [];
+    isDone = false;
     constructor(pixi){
-        this._pixi = pixi;
         this.pixi = new _pixiJs.Application({
             width: 1000,
             height: 546
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _minPngDefault.default).add('city2Texture', _city2JpgDefault.default);
+        this.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _minPngDefault.default).add('city2Texture', _city2JpgDefault.default).add('city3Texture', _city3JpgDefault.default);
         this.loader.load(()=>this.loadCompleted()
         );
     }
     loadCompleted() {
         this.bg = new _background.Background(this.loader.resources["city2Texture"].texture, this);
         this.pixi.stage.addChild(this.bg);
-        /*
-        this.pixi.texture 
-
-        */ /*this.bg2 = new PIXI.Sprite(this.loader.resources["cityTexture"].texture!)
-        this.pixi.stage.addChild(this.bg2)
-        */ this.min = new _min.Min(this.loader.resources["minTexture"].texture, this);
-        this.pixi.stage.addChild(this.min);
+        for(let i = 0; i < 2; i++){
+            this.min = new _min.Min(this.loader.resources["minTexture"].texture, this);
+            this.pixi.stage.addChild(this.min);
+            this.mins.push(this.min);
+        }
         this.plus = new _plus.Plus(this.loader.resources["plusTexture"].texture, this);
         this.pixi.stage.addChild(this.plus);
         this.pixi.ticker.add((delta)=>this.update(delta)
@@ -38785,27 +38781,31 @@ class Game {
         let a = this.randomInteger(4, 9);
         let b = this.randomInteger(1, 4);
         let c = a - b;
-        /*let text = new PIXI.Text("Wat is",a ,"-", b, { fill: ["#ffffff"] })
-
-        text.x = 200
-            text.y = 50
-            this.pixi.stage.addChild(text)
-            */ console.log("wat is", a, "-", b);
+        //this.text = new PIXI.Text("Wat is", a,"-",b, { fill: ["#ffffff"] })
+        //this.text.x = 200
+        //this.text.y = 200
+        //this.pixi.stage.addChild(this.text)
+        console.log("wat is", a, "-", b);
         console.log("het antword is", c);
     }
     update(delta) {
         this.plus.update(delta);
-        this.bg.update(delta);
-        if (this.collision(this.plus, this.min)) {
-            this.text.x = 200;
-            this.text.y = 200;
-            this.pixi.stage.addChild(this.text);
-            this.mathQues();
-        } else this.pixi.stage.removeChild(this.text);
+        for (const min of this.mins){
+            if (this.collision(this.plus, min)) {
+                if (!this.isDone) {
+                    this.pixi.stage.removeChild(min);
+                    this.mathQues();
+                    this.isDone = true;
+                }
+            } else {
+                this.pixi.stage.removeChild(this.text);
+                this.isDone = false;
+            }
+        }
     }
 }
 
-},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jWmLF":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/city3.jpg":"g4j9D"}],"jWmLF":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "plus.a530b1a6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -38935,6 +38935,7 @@ class Min extends _pixiJs.Sprite {
     constructor(texture, game){
         super(texture);
         this.game = game;
+        this.yspeed = 2;
         this.width = 150;
         this.height = 150;
         this.x = Math.random() * game.pixi.screen.right;
@@ -38990,7 +38991,10 @@ class Background extends _pixiJs.Sprite {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"g4j9D":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city3.3bef4d9c.jpg" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"hHDeU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Button", ()=>Button

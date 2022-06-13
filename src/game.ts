@@ -3,6 +3,7 @@ import heroPlus from "./images/plus.png"
 import cityImage from "./images/city.jpg"
 import minImage from "./images/min.png"
 import city2Image from "./images/city2.jpg"
+import city3Image from "./images/city3.jpg"
 import { Plus } from './plus'
 import { Min } from './min'
 import { Background } from './background'
@@ -13,14 +14,15 @@ export class Game {
     pixi: PIXI.Application
     loader: PIXI.Loader
     plus: Plus
-    bg : Background
+    bg: Background
     bg2: PIXI.Sprite
     x: number
     min: Min
-    text = new PIXI.Text("Wat is 8 - 2", { fill: ["#ffffff"] })
+    mins: Min[] = []
+    isDone: Boolean = false
+    text: PIXI.Text
 
-    constructor(pixi : PIXI.Application) {
-        this._pixi = pixi
+    constructor(pixi: PIXI.Application) {
         this.pixi = new PIXI.Application({ width: 1000, height: 546 })
         document.body.appendChild(this.pixi.view)
         this.loader = new PIXI.Loader()
@@ -29,11 +31,7 @@ export class Game {
             .add('cityTexture', cityImage)
             .add('minTexture', minImage)
             .add('city2Texture', city2Image)
-
-
-
-
-
+            .add('city3Texture', city3Image)
 
         this.loader.load(() => this.loadCompleted())
 
@@ -44,28 +42,20 @@ export class Game {
         this.bg = new Background(this.loader.resources["city2Texture"].texture!, this)
         this.pixi.stage.addChild(this.bg)
 
-
-        /*
-        this.pixi.texture 
-
-        */
-
-        /*this.bg2 = new PIXI.Sprite(this.loader.resources["cityTexture"].texture!)
-        this.pixi.stage.addChild(this.bg2)
-        */
-
-        this.min = new Min(this.loader.resources["minTexture"].texture!, this)
-        this.pixi.stage.addChild(this.min)
+        for (let i = 0; i < 2; i++) {
+            this.min = new Min(this.loader.resources["minTexture"].texture!, this)
+            this.pixi.stage.addChild(this.min)
+            this.mins.push(this.min)
+        }
 
         this.plus = new Plus(this.loader.resources["plusTexture"].texture!, this)
         this.pixi.stage.addChild(this.plus)
-
 
         this.pixi.ticker.add((delta: number) => this.update(delta))
 
     }
 
-    collision(a, b) {
+    public collision(a, b) {
         const bounds1 = a.getBounds()
         const bounds2 = b.getBounds()
 
@@ -78,8 +68,6 @@ export class Game {
     randomInteger(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
 
-
-
     }
 
     mathQues() {
@@ -87,12 +75,11 @@ export class Game {
         let b = this.randomInteger(1, 4)
         let c = a - b
 
-        /*let text = new PIXI.Text("Wat is",a ,"-", b, { fill: ["#ffffff"] })
+        //this.text = new PIXI.Text("Wat is", a,"-",b, { fill: ["#ffffff"] })
 
-        text.x = 200
-            text.y = 50
-            this.pixi.stage.addChild(text)
-            */
+        //this.text.x = 200
+        //this.text.y = 200
+        //this.pixi.stage.addChild(this.text)
 
         console.log("wat is", a, "-", b)
 
@@ -101,40 +88,26 @@ export class Game {
 
 
     update(delta: number) {
+
         this.plus.update(delta)
-        this.bg.update(delta)
+        for (const min of this.mins) {
 
+            if (this.collision(this.plus, min)) {
 
+                if (!this.isDone) {
+                    this.pixi.stage.removeChild(min)
 
+                    this.mathQues()
 
-        if (this.collision(this.plus, this.min)) {
+                    this.isDone = true;
+                }
 
+            } else {
+                this.pixi.stage.removeChild(this.text)
 
-            this.text.x = 200
-            this.text.y = 200
-            this.pixi.stage.addChild(this.text)
+                this.isDone = false
 
-
-
-
-
-            this.mathQues()
-
-
-
-
-        } else {
-            this.pixi.stage.removeChild(this.text)
-
+            }
         }
-
-
-
-
-
-
     }
-
 }
-
-

@@ -2,8 +2,8 @@ import * as PIXI from 'pixi.js'
 import { Game } from './game'
 
 export class Plus extends PIXI.Sprite {
-    yspeed: number = 0
-    xspeed: number = 0
+    private yspeed: number = 0
+    private xspeed: number = 0
     game: Game
 
 

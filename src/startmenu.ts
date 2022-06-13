@@ -27,7 +27,7 @@ export class Startmenu {
   }
 
   private onClick() {
-    this.button.destroy()
+    this.button.destroy
     new Game(this._pixi);
     
   }

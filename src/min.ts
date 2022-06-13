@@ -1,11 +1,16 @@
 import * as PIXI from 'pixi.js'
 import { Game } from './game'
+import { Plus } from './plus'
 
 export class Min extends PIXI.Sprite {
     game : Game
+    plus: Plus
+    min : Min
+    private yspeed: number
     constructor(texture: PIXI.Texture, game:Game) {
         super(texture)
         this.game = game
+        this.yspeed = 2
         
 
         this.width = 150
@@ -16,3 +21,4 @@ export class Min extends PIXI.Sprite {
 
 
 }
+
