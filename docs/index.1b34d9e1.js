@@ -530,12 +530,13 @@ class Startmenu {
             backgroundColor: 3355443
         });
         document.body.appendChild(this._pixi.view);
-        const button = new _button.Button(this._pixi.screen.width / 2, this._pixi.screen.height / 2);
-        this._pixi.stage.addChild(button);
-        button.on("pointerdown", ()=>this.onClick()
+        this.button = new _button.Button(this._pixi.screen.width / 2, this._pixi.screen.height / 2);
+        this._pixi.stage.addChild(this.button);
+        this.button.on("pointerdown", ()=>this.onClick()
         );
     }
     onClick() {
+        this.button.destroy();
         new _game.Game(this._pixi);
     }
 }
@@ -38804,7 +38805,7 @@ class Game {
     }
 }
 
-},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./background":"6FKGH"}],"jWmLF":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jWmLF":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "plus.a530b1a6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
