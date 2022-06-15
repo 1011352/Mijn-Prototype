@@ -30,10 +30,6 @@ export class Plus extends PIXI.Sprite {
 
     onKeyDown(e: KeyboardEvent): void {
         switch (e.key.toUpperCase()) {
-            case " ":
-
-                break
-
 
             case "A":
             case "ARROWLEFT":

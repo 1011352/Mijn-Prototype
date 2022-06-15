@@ -536,7 +536,7 @@ class Startmenu {
         );
     }
     onClick() {
-        this.button.destroy;
+        this.button.destroy();
         new _game.Game(this._pixi);
     }
 }
@@ -38742,9 +38742,11 @@ var _city3JpgDefault = parcelHelpers.interopDefault(_city3Jpg);
 var _plus = require("./plus");
 var _min = require("./min");
 var _background = require("./background");
+var _pause = require("./pause");
 class Game {
     mins = [];
     isDone = false;
+    paused = false;
     constructor(pixi){
         this.pixi = new _pixiJs.Application({
             width: 1000,
@@ -38752,22 +38754,30 @@ class Game {
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _minPngDefault.default).add('city2Texture', _city2JpgDefault.default).add('city3Texture', _city3JpgDefault.default);
-        this.loader.load(()=>this.loadCompleted()
+        this.pixi.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _minPngDefault.default).add('city2Texture', _city2JpgDefault.default).add('city3Texture', _city3JpgDefault.default);
+        this.pixi.loader.load(()=>this.loadCompleted()
         );
     }
     loadCompleted() {
-        this.bg = new _background.Background(this.loader.resources["city2Texture"].texture, this);
+        this.bg = new _background.Background(this.pixi.loader.resources["city2Texture"].texture, this.pixi.screen.width, this.pixi.screen.height);
         this.pixi.stage.addChild(this.bg);
-        for(let i = 0; i < 2; i++){
-            this.min = new _min.Min(this.loader.resources["minTexture"].texture, this);
+        for(let i = 0; i < 1; i++){
+            this.min = new _min.Min(this.pixi.loader.resources["minTexture"].texture, this);
             this.pixi.stage.addChild(this.min);
             this.mins.push(this.min);
         }
-        this.plus = new _plus.Plus(this.loader.resources["plusTexture"].texture, this);
+        this.plus = new _plus.Plus(this.pixi.loader.resources["plusTexture"].texture, this);
         this.pixi.stage.addChild(this.plus);
+        this.button = new _pause.PauseButton(this.pixi.screen.width / 9, this.pixi.screen.height / 9);
+        this.pixi.stage.addChild(this.button);
+        this.button.on("pointerdown", ()=>this.onClick()
+        );
         this.pixi.ticker.add((delta)=>this.update(delta)
         );
+    }
+    onClick() {
+        if (!this.paused) this.pixi.ticker.stop();
+        else this.pixi.ticker.start();
     }
     collision(a, b) {
         const bounds1 = a.getBounds();
@@ -38781,19 +38791,24 @@ class Game {
         let a = this.randomInteger(4, 9);
         let b = this.randomInteger(1, 4);
         let c = a - b;
-        //this.text = new PIXI.Text("Wat is", a,"-",b, { fill: ["#ffffff"] })
-        //this.text.x = 200
-        //this.text.y = 200
-        //this.pixi.stage.addChild(this.text)
+        this.text = new _pixiJs.Text("sample", {
+            fill: [
+                "#ffffff"
+            ]
+        });
+        this.text.x = 200;
+        this.text.y = 200;
+        this.pixi.stage.addChild(this.text);
         console.log("wat is", a, "-", b);
         console.log("het antword is", c);
+        this.text.text = "wat is";
     }
     update(delta) {
+        this.bg.update(delta);
         this.plus.update(delta);
         for (const min of this.mins){
             if (this.collision(this.plus, min)) {
                 if (!this.isDone) {
-                    this.pixi.stage.removeChild(min);
                     this.mathQues();
                     this.isDone = true;
                 }
@@ -38805,7 +38820,7 @@ class Game {
     }
 }
 
-},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/city3.jpg":"g4j9D"}],"jWmLF":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./images/city3.jpg":"g4j9D","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./pause":"hvJee"}],"jWmLF":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "plus.a530b1a6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -38851,6 +38866,9 @@ module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "min.7d
 },{"./helpers/bundle-url":"lgJ39"}],"4z1Sl":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city2.1ff0dd0b.jpg" + "?" + Date.now();
 
+},{"./helpers/bundle-url":"lgJ39"}],"g4j9D":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city3.3bef4d9c.jpg" + "?" + Date.now();
+
 },{"./helpers/bundle-url":"lgJ39"}],"7WMnV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -38872,8 +38890,6 @@ class Plus extends _pixiJs.Sprite {
     }
     onKeyDown(e) {
         switch(e.key.toUpperCase()){
-            case " ":
-                break;
             case "A":
             case "ARROWLEFT":
                 this.xspeed = -4;
@@ -38949,11 +38965,10 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Background", ()=>Background
 );
 var _pixiJs = require("pixi.js");
-class Background extends _pixiJs.Sprite {
+class Background extends _pixiJs.TilingSprite {
     xmove = 0;
-    constructor(texture, game){
-        super(texture);
-        this.game = game;
+    constructor(texture, w, h){
+        super(texture, w, h);
         window.addEventListener("keydown", (e)=>this.onKeyDown(e)
         );
         window.addEventListener("keyup", (e)=>this.onKeyUp(e)
@@ -38982,19 +38997,42 @@ class Background extends _pixiJs.Sprite {
         }
     }
     update(delta) {
-        this.x += this.xmove * delta;
-        this.keepInScreen1();
-    }
-    keepInScreen1() {
-        if (this.getBounds().left > this.game.pixi.screen.right) this.x = 0;
-        if (this.getBounds().right < this.game.pixi.screen.left) this.x = 1000;
+        this.tilePosition.x += this.xmove * delta;
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"g4j9D":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city3.3bef4d9c.jpg" + "?" + Date.now();
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hvJee":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "PauseButton", ()=>PauseButton
+);
+var _pixiJs = require("pixi.js");
+class PauseButton extends _pixiJs.Graphics {
+    constructor(x, y){
+        super();
+        this.x = x;
+        this.y = y;
+        //this.beginFill(0x0000ff);
+        //this.drawRoundedRect(-100, -25, 200, 50, 15);
+        //this.endFill();
+        const pauseText = new _pixiJs.Text("Pause Game", {
+            breakWords: true,
+            dropShadow: true,
+            fill: "white",
+            fontFamily: "Arial Black",
+            fontWeight: "bold",
+            strokeThickness: 3
+        });
+        pauseText.x = 0;
+        pauseText.y = 0;
+        pauseText.anchor.set(0.5);
+        this.addChild(pauseText);
+        this.buttonMode = true;
+        this.interactive = true;
+    }
+}
 
-},{"./helpers/bundle-url":"lgJ39"}],"hHDeU":[function(require,module,exports) {
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Button", ()=>Button

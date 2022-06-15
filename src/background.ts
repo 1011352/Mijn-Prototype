@@ -2,15 +2,16 @@ import * as PIXI from "pixi.js";
 import { Sprite } from "pixi.js";
 import { Game } from './game'
 
-export class Background extends PIXI.Sprite {
+export class Background extends  PIXI.TilingSprite  {
     xmove: number = 0
     game : Game
     pixi : PIXI.Application
 
 
-    constructor(texture: PIXI.Texture, game: Game) {
-        super(texture);
-        this.game = game
+    constructor(texture: PIXI.Texture, w:number, h:number, ) {
+        super(texture, w, h)
+      
+
 
 
 
@@ -51,28 +52,16 @@ export class Background extends PIXI.Sprite {
         }
     }
 
-    update(delta: number) {
-        this.x += this.xmove * delta
+    update(delta:number) {
+        this.tilePosition.x += this.xmove * delta
 
-        this.keepInScreen1()
+    
 
 
         
 
     }
 
-    private keepInScreen1() {
-        if (this.getBounds().left > this.game.pixi.screen.right) {
 
-            this.x = 0
-
-        }
-        if (this.getBounds().right < this.game.pixi.screen.left) {
-
-            this.x = 1000
-
-        }
-
-    }
 }
 

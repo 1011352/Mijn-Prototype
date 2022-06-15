@@ -7,51 +7,78 @@ import city3Image from "./images/city3.jpg"
 import { Plus } from './plus'
 import { Min } from './min'
 import { Background } from './background'
+import { PauseButton } from './pause'
 
 
 
 export class Game {
     pixi: PIXI.Application
     loader: PIXI.Loader
-    plus: Plus
     bg: Background
-    bg2: PIXI.Sprite
-    x: number
+    plus: Plus
     min: Min
     mins: Min[] = []
-    isDone: Boolean = false
     text: PIXI.Text
+    button: PauseButton
+    isDone: Boolean = false
+    paused: boolean = false
 
     constructor(pixi: PIXI.Application) {
         this.pixi = new PIXI.Application({ width: 1000, height: 546 })
         document.body.appendChild(this.pixi.view)
         this.loader = new PIXI.Loader()
 
-        this.loader.add('plusTexture', heroPlus)
+        this.pixi.loader.add('plusTexture', heroPlus)
             .add('cityTexture', cityImage)
             .add('minTexture', minImage)
             .add('city2Texture', city2Image)
             .add('city3Texture', city3Image)
 
-        this.loader.load(() => this.loadCompleted())
+
+
+
+        this.pixi.loader.load(() => this.loadCompleted())
 
     }
 
+
     loadCompleted() {
 
-        this.bg = new Background(this.loader.resources["city2Texture"].texture!, this)
+        this.bg = new Background(this.pixi.loader.resources["city2Texture"].texture!, this.pixi.screen.width, this.pixi.screen.height)
         this.pixi.stage.addChild(this.bg)
 
-        for (let i = 0; i < 2; i++) {
-            this.min = new Min(this.loader.resources["minTexture"].texture!, this)
+
+        for (let i = 0; i < 1; i++) {
+            this.min = new Min(this.pixi.loader.resources["minTexture"].texture!, this)
             this.pixi.stage.addChild(this.min)
             this.mins.push(this.min)
         }
 
-        this.plus = new Plus(this.loader.resources["plusTexture"].texture!, this)
+        this.plus = new Plus(this.pixi.loader.resources["plusTexture"].texture!, this)
         this.pixi.stage.addChild(this.plus)
 
+        this.button = new PauseButton(
+            this.pixi.screen.width / 9,
+            this.pixi.screen.height / 9
+        );
+
+        this.pixi.stage.addChild(this.button);
+
+        this.button.on("pointerdown", () => this.onClick());
+
+
         this.pixi.ticker.add((delta: number) => this.update(delta))
+
+
+    }
+
+    onClick() {
+        if (!this.paused) {
+            this.pixi.ticker.stop()
+        }
+        else {
+            this.pixi.ticker.start()
+        }
 
     }
 
@@ -75,19 +102,24 @@ export class Game {
         let b = this.randomInteger(1, 4)
         let c = a - b
 
-        //this.text = new PIXI.Text("Wat is", a,"-",b, { fill: ["#ffffff"] })
+        this.text = new PIXI.Text("sample", { fill: ["#ffffff"] })
 
-        //this.text.x = 200
-        //this.text.y = 200
-        //this.pixi.stage.addChild(this.text)
+        this.text.x = 200
+        this.text.y = 200
+        this.pixi.stage.addChild(this.text)
 
         console.log("wat is", a, "-", b)
-
         console.log("het antword is", c)
+
+        this.text.text = "wat is", a, "-", b
     }
 
 
+
+
     update(delta: number) {
+        this.bg.update(delta)
+
 
         this.plus.update(delta)
         for (const min of this.mins) {
@@ -95,7 +127,6 @@ export class Game {
             if (this.collision(this.plus, min)) {
 
                 if (!this.isDone) {
-                    this.pixi.stage.removeChild(min)
 
                     this.mathQues()
 
