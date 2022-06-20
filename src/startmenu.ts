@@ -4,7 +4,8 @@ import { Button } from "./button";
 
 export class Startmenu {
   private _pixi: PIXI.Application;
-  button: Button;
+  private button: Button;
+  
   constructor() {
     console.log("startmenu created");
 

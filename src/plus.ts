@@ -12,8 +12,8 @@ export class Plus extends PIXI.Sprite {
         this.game = game
         
 
-        this.x = 0
-        this.y = 0
+        this.x = 400
+        this.y = 200
 
 
         window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
