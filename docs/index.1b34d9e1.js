@@ -38733,8 +38733,8 @@ var _plusPng = require("./images/plus.png");
 var _plusPngDefault = parcelHelpers.interopDefault(_plusPng);
 var _cityJpg = require("./images/city.jpg");
 var _cityJpgDefault = parcelHelpers.interopDefault(_cityJpg);
-var _minPng = require("./images/min.png");
-var _minPngDefault = parcelHelpers.interopDefault(_minPng);
+var _1EuroPng = require("./images/1euro.png");
+var _1EuroPngDefault = parcelHelpers.interopDefault(_1EuroPng);
 var _city2Jpg = require("./images/city2.jpg");
 var _city2JpgDefault = parcelHelpers.interopDefault(_city2Jpg);
 var _plus = require("./plus");
@@ -38748,6 +38748,7 @@ class Game {
     buttons = [];
     isDone = false;
     paused = false;
+    container = new _pixiJs.Container();
     constructor(pixi){
         this.pixi = new _pixiJs.Application({
             width: 1000,
@@ -38755,7 +38756,7 @@ class Game {
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.pixi.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _minPngDefault.default).add('city2Texture', _city2JpgDefault.default);
+        this.pixi.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _1EuroPngDefault.default).add('city2Texture', _city2JpgDefault.default);
         //.add('city4Texture', city4Image)
         this.pixi.loader.load(()=>this.loadCompleted()
         );
@@ -38771,7 +38772,7 @@ class Game {
         });
         this.bg = new _background.Background(this.pixi.loader.resources["city2Texture"].texture, this.pixi.screen.width, this.pixi.screen.height);
         this.pixi.stage.addChild(this.bg);
-        for(let i = 0; i < 1; i++){
+        for(let i = 0; i < 5; i++){
             this.min = new _min.Min(this.pixi.loader.resources["minTexture"].texture, this);
             this.pixi.stage.addChild(this.min);
             this.mins.push(this.min);
@@ -38828,7 +38829,7 @@ class Game {
         this.text = new _pixiJs.Text("sample", this.style);
         this.text.x = 350;
         this.text.y = 100;
-        this.pixi.stage.addChild(this.text);
+        this.container.addChild(this.text);
         console.log("wat is", this.a, "-", this.b);
         console.log("het antword is", this.c);
         this.text.text = " wat is " + this.a + "-" + this.b;
@@ -38852,7 +38853,7 @@ class Game {
             this.pixi.stage.removeChild(this.text);
             this.score.text = Number(this.score.text) + 1;
             this.onClickS();
-            this.pixi.stage.removeChild(this.button);
+            this.pixi.stage.removeChild(this.container);
         } else {
             let text = new _pixiJs.Text("Probeer het Nog een Keer", this.style);
             text.x = 350;
@@ -38867,8 +38868,8 @@ class Game {
     addButton(answer, move) {
         this.button = new _button2.Button2(this.pixi.screen.width / move, this.pixi.screen.height / 3);
         this.button.question.text = answer;
-        this.pixi.stage.addChild(this.button);
-        this.buttons.push(this.button);
+        this.container.addChild(this.button);
+        this.pixi.stage.addChild(this.container);
     }
     update(delta) {
         //this.bg.update(delta)
@@ -38900,7 +38901,7 @@ class Game {
         }*/ }
 }
 
-},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/min.png":"b45SD","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","./pause":"hvJee","./button2":"hmPuO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./unpause":"8Z81o"}],"jWmLF":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/plus.png":"jWmLF","./images/city.jpg":"dp0wP","./images/city2.jpg":"4z1Sl","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","./pause":"hvJee","./unpause":"8Z81o","./button2":"hmPuO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./images/1euro.png":"iGx59"}],"jWmLF":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "plus.a530b1a6.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -38939,9 +38940,6 @@ exports.getOrigin = getOrigin;
 
 },{}],"dp0wP":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city.3dfee61f.jpg" + "?" + Date.now();
-
-},{"./helpers/bundle-url":"lgJ39"}],"b45SD":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "min.7d0a9b7e.png" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"4z1Sl":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "city2.1ff0dd0b.jpg" + "?" + Date.now();
@@ -39028,8 +39026,8 @@ class Min extends _pixiJs.Sprite {
     constructor(texture, game){
         super(texture);
         this.game = game;
-        this.width = 150;
-        this.height = 150;
+        //this.width = 150
+        //this.height = 150
         this.x = Math.random() * game.pixi.screen.right + 1;
         this.y = Math.random() * game.pixi.screen.bottom + 1;
     //window.addEventListener("keydown", (e: KeyboardEvent) => this.onKeyDown(e))
@@ -39110,37 +39108,6 @@ class PauseButton extends _pixiJs.Graphics {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hmPuO":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "Button2", ()=>Button2
-);
-var _pixiJs = require("pixi.js");
-class Button2 extends _pixiJs.Graphics {
-    constructor(x, y){
-        super();
-        this.x = x;
-        this.y = y;
-        this.beginFill(0);
-        this.drawRoundedRect(0, 0, 150, 80, 15);
-        this.endFill();
-        this.question = new _pixiJs.Text("Start Game", {
-            breakWords: true,
-            dropShadow: true,
-            fill: "white",
-            fontFamily: "Arial Black",
-            fontWeight: "bold",
-            strokeThickness: 3
-        });
-        this.question.x = this.getBounds().width / 2;
-        this.question.y = this.getBounds().height / 2;
-        this.question.anchor.set(0.5);
-        this.addChild(this.question);
-        this.buttonMode = true;
-        this.interactive = true;
-    }
-}
-
 },{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Z81o":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -39172,7 +39139,41 @@ class StartButton extends _pixiJs.Graphics {
     }
 }
 
-},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hHDeU":[function(require,module,exports) {
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hmPuO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Button2", ()=>Button2
+);
+var _pixiJs = require("pixi.js");
+class Button2 extends _pixiJs.Graphics {
+    constructor(x, y){
+        super();
+        this.x = x;
+        this.y = y;
+        this.beginFill(0);
+        this.drawRoundedRect(0, 0, 150, 80, 15);
+        this.endFill();
+        this.question = new _pixiJs.Text("Start Game", {
+            breakWords: true,
+            dropShadow: true,
+            fill: "white",
+            fontFamily: "Arial Black",
+            fontWeight: "bold",
+            strokeThickness: 3
+        });
+        this.question.x = this.getBounds().width / 2;
+        this.question.y = this.getBounds().height / 2;
+        this.question.anchor.set(0.5);
+        this.addChild(this.question);
+        this.buttonMode = true;
+        this.interactive = true;
+    }
+}
+
+},{"pixi.js":"dsYej","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iGx59":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('8xX2B') + "1euro.5889f920.png" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"hHDeU":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Button", ()=>Button

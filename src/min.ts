@@ -12,8 +12,8 @@ export class Min extends PIXI.Sprite {
         this.game = game
 
 
-        this.width = 150
-        this.height = 150
+        //this.width = 150
+        //this.height = 150
         this.x = (Math.random() * game.pixi.screen.right) + 1
         this.y = (Math.random() * game.pixi.screen.bottom) + 1
 
