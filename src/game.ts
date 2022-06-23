@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js'
 import heroPlus from "./images/plus.png"
 import cityImage from "./images/city.jpg"
 import minImage from "./images/1euro.png"
-import city2Image from "./images/city2.jpg"
+import city2Image from "./images/city4.jpg"
 import { Plus } from './plus'
 import { Min } from './min'
 import { Background } from './background'
@@ -10,6 +10,7 @@ import { PauseButton } from './pause'
 import { StartButton } from './unpause'
 import { Maths } from './question'
 import { Button2 } from "./button2";
+import { Startmenu } from './startmenu'
 
 
 
@@ -29,13 +30,14 @@ export class Game {
     private sButton: StartButton
     private isDone: Boolean = false
     private paused: boolean = false
+    private scoreNumber : number
     private container = new PIXI.Container();
     private a: number
     private b: number
     private c: number
 
     constructor(pixi: PIXI.Application) {
-        this.pixi = new PIXI.Application({ width: 1000, height: 534 })
+        this.pixi = new PIXI.Application({ width: 1920, height: 1080 })
         document.body.appendChild(this.pixi.view)
         this.loader = new PIXI.Loader()
 
@@ -70,7 +72,7 @@ export class Game {
         this.pixi.stage.addChild(this.bg)
 
 
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 8; i++) {
             this.min = new Min(this.pixi.loader.resources["minTexture"].texture!, this)
             this.pixi.stage.addChild(this.min)
             this.mins.push(this.min)
@@ -80,12 +82,12 @@ export class Game {
         this.pixi.stage.addChild(this.plus)
 
         this.sButton = new StartButton(
-            this.pixi.screen.width / 9,
-            this.pixi.screen.height / 11)
+            this.pixi.screen.width / 15,
+            this.pixi.screen.height / 35)
 
         this.pButton = new PauseButton(
-            this.pixi.screen.width / 9,
-            this.pixi.screen.height / 11
+            this.pixi.screen.width / 15,
+            this.pixi.screen.height / 35
         );
 
         this.pixi.stage.addChild(this.pButton);
@@ -99,12 +101,14 @@ export class Game {
 
         let score2 = new PIXI.Text("Score   =", this.style)
 
-        score2.x = 750
+        score2.x = 1700
         score2.y = 20
         this.pixi.stage.addChild(score2)
 
-        this.score = new PIXI.Text("0", this.style)
-        this.score.x = 900
+        this.scoreNumber = 0 
+
+        this.score = new PIXI.Text(this.scoreNumber , this.style)
+        this.score.x = 1850
         this.score.y = 20
         this.pixi.stage.addChild(this.score)
 
@@ -153,11 +157,12 @@ export class Game {
         this.b = this.randomInteger(1, 4)
         this.c = this.a - this.b
         let d = this.randomInteger(1, 10)
+        let e = this.randomInteger(11,20)
 
         this.text = new PIXI.Text("sample", this.style)
 
-        this.text.x = 350
-        this.text.y = 100
+        this.text.x = 630
+        this.text.y = 275
         this.container.addChild(this.text)
     
 
@@ -175,8 +180,8 @@ export class Game {
 
 
         this.addButton(d + 2, 3)
-        this.addButton(d - 1, 2)
-        this.addButton(this.c, 6)
+        this.addButton(d - 1, 2.3)
+        this.addButton(this.c, 4.3)
         this.button.on("pointerdown", () => this.onClick2());
 
 
@@ -190,6 +195,7 @@ export class Game {
             text.y = 400
             this.pixi.stage.addChild(text)
             this.pixi.stage.removeChild(this.text)
+            this.scoreNumber += 1
             this.score.text = Number(this.score.text) + 1
             this.onClickS()
 
@@ -201,7 +207,6 @@ export class Game {
             this.pixi.stage.addChild(text)
             this.pixi.stage.removeChild(this.text)
             this.score.text = Number(this.score.text) - 1
-            this.onClickS()
             this.button.destroy()
         }
 
@@ -237,10 +242,10 @@ export class Game {
         //this.bg.update(delta)
         this.plus.update(delta)
 
-
         for (let g = 0; g < this.mins.length; g++) {
             if (this.collision(this.plus, this.mins[g])) {
                 //this.pixi.stage.removeChild(this.min)
+                this.pixi.ticker.speed = 0 
                 this.mathQues();
                 this.onClickP();
                 this.mins[g].destroy();
@@ -270,4 +275,4 @@ export class Game {
 
 }
 
-new Game
+new Game()

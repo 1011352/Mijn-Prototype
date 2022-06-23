@@ -7,7 +7,7 @@ export class Button2 extends PIXI.Graphics {
     super();
     this.x = x;
     this.y = y;
-    this.beginFill(0x0000ff);
+    this.beginFill(0x000000);
     this.drawRoundedRect(0, 0, 150, 80, 15);
     this.endFill();
     

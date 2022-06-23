@@ -33,21 +33,21 @@ export class Plus extends PIXI.Sprite {
 
             case "A":
             case "ARROWLEFT":
-                this.xspeed = -4
+                this.xspeed = -6
                 this.scale.set(-1, 1)
                 break
             case "D":
             case "ARROWRIGHT":
-                this.xspeed = 4
+                this.xspeed = 6
                 this.scale.set(1, 1)
                 break
             case "W":
             case "ARROWUP":
-                this.yspeed = -4
+                this.yspeed = -6
                 break
             case "S":
             case "ARROWDOWN":
-                this.yspeed = 4
+                this.yspeed = 6
                 break
         }
 
@@ -90,12 +90,12 @@ export class Plus extends PIXI.Sprite {
 
         if (this.getBounds().bottom < this.game.pixi.screen.top) {
 
-            this.y = this.getBounds().height + 360
+            this.y = this.getBounds().height + 870
 
         }
         if (this.getBounds().right < this.game.pixi.screen.left) {
 
-            this.x = this.getBounds().width +1000
+            this.x = this.getBounds().width +1900
 
         }
 

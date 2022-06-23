@@ -3,15 +3,15 @@ import { Game } from "./game";
 import { Button } from "./button";
 
 export class Startmenu {
-  private _pixi: PIXI.Application;
+  _pixi: PIXI.Application;
   private button: Button;
   
   constructor() {
     console.log("startmenu created");
 
     this._pixi = new PIXI.Application({
-        width: 1000, 
-        height: 546,
+        width: 1920, 
+        height: 1080,
         backgroundColor: 0x333333
     });
 

@@ -525,8 +525,8 @@ var _cityJpg = require("./images/city.jpg");
 var _cityJpgDefault = parcelHelpers.interopDefault(_cityJpg);
 var _1EuroPng = require("./images/1euro.png");
 var _1EuroPngDefault = parcelHelpers.interopDefault(_1EuroPng);
-var _city2Jpg = require("./images/city2.jpg");
-var _city2JpgDefault = parcelHelpers.interopDefault(_city2Jpg);
+var _city4Jpg = require("./images/city4.jpg");
+var _city4JpgDefault = parcelHelpers.interopDefault(_city4Jpg);
 var _plus = require("./plus");
 var _min = require("./min");
 var _background = require("./background");
@@ -540,12 +540,12 @@ class Game {
     container = new _pixiJs.Container();
     constructor(pixi){
         this.pixi = new _pixiJs.Application({
-            width: 1000,
-            height: 534
+            width: 1920,
+            height: 1080
         });
         document.body.appendChild(this.pixi.view);
         this.loader = new _pixiJs.Loader();
-        this.pixi.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _1EuroPngDefault.default).add('city2Texture', _city2JpgDefault.default);
+        this.pixi.loader.add('plusTexture', _plusPngDefault.default).add('cityTexture', _cityJpgDefault.default).add('minTexture', _1EuroPngDefault.default).add('city2Texture', _city4JpgDefault.default);
         //.add('city4Texture', city4Image)
         this.pixi.loader.load(()=>this.loadCompleted()
         );
@@ -561,15 +561,15 @@ class Game {
         });
         this.bg = new _background.Background(this.pixi.loader.resources["city2Texture"].texture, this.pixi.screen.width, this.pixi.screen.height);
         this.pixi.stage.addChild(this.bg);
-        for(let i = 0; i < 5; i++){
+        for(let i = 0; i < 8; i++){
             this.min = new _min.Min(this.pixi.loader.resources["minTexture"].texture, this);
             this.pixi.stage.addChild(this.min);
             this.mins.push(this.min);
         }
         this.plus = new _plus.Plus(this.pixi.loader.resources["plusTexture"].texture, this);
         this.pixi.stage.addChild(this.plus);
-        this.sButton = new _unpause.StartButton(this.pixi.screen.width / 9, this.pixi.screen.height / 11);
-        this.pButton = new _pause.PauseButton(this.pixi.screen.width / 9, this.pixi.screen.height / 11);
+        this.sButton = new _unpause.StartButton(this.pixi.screen.width / 15, this.pixi.screen.height / 35);
+        this.pButton = new _pause.PauseButton(this.pixi.screen.width / 15, this.pixi.screen.height / 35);
         this.pixi.stage.addChild(this.pButton);
         this.pButton.on("pointerdown", ()=>this.onClickP()
         );
@@ -578,11 +578,12 @@ class Game {
         this.pixi.ticker.add((delta)=>this.update(delta)
         );
         let score2 = new _pixiJs.Text("Score   =", this.style);
-        score2.x = 750;
+        score2.x = 1700;
         score2.y = 20;
         this.pixi.stage.addChild(score2);
-        this.score = new _pixiJs.Text("0", this.style);
-        this.score.x = 900;
+        this.scoreNumber = 0;
+        this.score = new _pixiJs.Text(this.scoreNumber, this.style);
+        this.score.x = 1850;
         this.score.y = 20;
         this.pixi.stage.addChild(this.score);
     }
@@ -615,9 +616,10 @@ class Game {
         this.b = this.randomInteger(1, 4);
         this.c = this.a - this.b;
         let d = this.randomInteger(1, 10);
+        let e = this.randomInteger(11, 20);
         this.text = new _pixiJs.Text("sample", this.style);
-        this.text.x = 350;
-        this.text.y = 100;
+        this.text.x = 630;
+        this.text.y = 275;
         this.container.addChild(this.text);
         console.log("wat is", this.a, "-", this.b);
         console.log("het antword is", this.c);
@@ -628,8 +630,8 @@ class Game {
             this.mins.push(this.min);
         }
         this.addButton(d + 2, 3);
-        this.addButton(d - 1, 2);
-        this.addButton(this.c, 6);
+        this.addButton(d - 1, 2.3);
+        this.addButton(this.c, 4.3);
         this.button.on("pointerdown", ()=>this.onClick2()
         );
     }
@@ -640,6 +642,7 @@ class Game {
             text.y = 400;
             this.pixi.stage.addChild(text);
             this.pixi.stage.removeChild(this.text);
+            this.scoreNumber += 1;
             this.score.text = Number(this.score.text) + 1;
             this.onClickS();
             this.pixi.stage.removeChild(this.container);
@@ -650,7 +653,6 @@ class Game {
             this.pixi.stage.addChild(text);
             this.pixi.stage.removeChild(this.text);
             this.score.text = Number(this.score.text) - 1;
-            this.onClickS();
             this.button.destroy();
         }
     }
@@ -665,6 +667,7 @@ class Game {
         this.plus.update(delta);
         for(let g = 0; g < this.mins.length; g++)if (this.collision(this.plus, this.mins[g])) {
             //this.pixi.stage.removeChild(this.min)
+            this.pixi.ticker.speed = 0;
             this.mathQues();
             this.onClickP();
             this.mins[g].destroy();
@@ -689,9 +692,9 @@ class Game {
             }
         }*/ }
 }
-new Game;
+new Game();
 
-},{"pixi.js":"dsYej","./images/plus.png":"hhba6","./images/city.jpg":"ivwY1","./images/1euro.png":"kpuwJ","./images/city2.jpg":"j9BFL","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","./pause":"hvJee","./unpause":"8Z81o","./button2":"hmPuO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
+},{"pixi.js":"dsYej","./images/plus.png":"hhba6","./images/city.jpg":"ivwY1","./images/1euro.png":"kpuwJ","./images/city4.jpg":"3Dqt7","./plus":"7WMnV","./min":"iNJhi","./background":"6FKGH","./pause":"hvJee","./unpause":"8Z81o","./button2":"hmPuO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dsYej":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "utils", ()=>_utils
@@ -38915,8 +38918,8 @@ module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "city.3
 },{"./helpers/bundle-url":"lgJ39"}],"kpuwJ":[function(require,module,exports) {
 module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "1euro.5889f920.png" + "?" + Date.now();
 
-},{"./helpers/bundle-url":"lgJ39"}],"j9BFL":[function(require,module,exports) {
-module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "city2.1ff0dd0b.jpg" + "?" + Date.now();
+},{"./helpers/bundle-url":"lgJ39"}],"3Dqt7":[function(require,module,exports) {
+module.exports = require('./helpers/bundle-url').getBundleURL('emE5o') + "city4.9ee1397a.jpg" + "?" + Date.now();
 
 },{"./helpers/bundle-url":"lgJ39"}],"7WMnV":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -38941,21 +38944,21 @@ class Plus extends _pixiJs.Sprite {
         switch(e.key.toUpperCase()){
             case "A":
             case "ARROWLEFT":
-                this.xspeed = -4;
+                this.xspeed = -6;
                 this.scale.set(-1, 1);
                 break;
             case "D":
             case "ARROWRIGHT":
-                this.xspeed = 4;
+                this.xspeed = 6;
                 this.scale.set(1, 1);
                 break;
             case "W":
             case "ARROWUP":
-                this.yspeed = -4;
+                this.yspeed = -6;
                 break;
             case "S":
             case "ARROWDOWN":
-                this.yspeed = 4;
+                this.yspeed = 6;
                 break;
         }
     }
@@ -38980,8 +38983,8 @@ class Plus extends _pixiJs.Sprite {
     keepInScreen() {
         if (this.getBounds().left > this.game.pixi.screen.right) this.x = -this.getBounds().width;
         if (this.getBounds().top > this.game.pixi.screen.bottom) this.y = -this.getBounds().height;
-        if (this.getBounds().bottom < this.game.pixi.screen.top) this.y = this.getBounds().height + 360;
-        if (this.getBounds().right < this.game.pixi.screen.left) this.x = this.getBounds().width + 1000;
+        if (this.getBounds().bottom < this.game.pixi.screen.top) this.y = this.getBounds().height + 870;
+        if (this.getBounds().right < this.game.pixi.screen.left) this.x = this.getBounds().width + 1900;
     }
     update(delta) {
         this.x += this.xspeed * delta;
@@ -39124,7 +39127,7 @@ class Button2 extends _pixiJs.Graphics {
         super();
         this.x = x;
         this.y = y;
-        this.beginFill(255);
+        this.beginFill(0);
         this.drawRoundedRect(0, 0, 150, 80, 15);
         this.endFill();
         this.question = new _pixiJs.Text("Start Game", {
